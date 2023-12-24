@@ -1,0 +1,155 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+#include<stdbool.h>
+#include<stdint.h>
+#define MAX_NAME 256
+#define TABLE_SIZE 10
+typedef struct {
+    char name [MAX_NAME];
+       int age ;
+       struct person *next;
+       //..add orther stuff later , mybe
+} person;
+
+
+ person * hash_table[TABLE_SIZE];
+
+unsigned int hash (char *name )
+{
+     
+     int len = strnlen(name,MAX_NAME);
+     unsigned int hash_value =0;
+     for(int i=0;i<len ;i++){
+        hash_value +=name[i];
+        hash_value = (hash_value*name[i]) % TABLE_SIZE;
+     }
+    return hash_value;
+}
+void init_hash_table(){
+    for(int i=0;i<TABLE_SIZE;i++){
+        hash_table[i]=NULL;
+    }
+    //table is empty
+}
+
+void prnt(){
+    printf("Start\n");
+    for(int i=0;i<TABLE_SIZE;i++){
+        if(hash_table[i]==NULL){
+            printf("\t%i\t---\n",i);
+
+        }
+        else{
+            printf("\t%i\t",i);
+            person *tmp = hash_table[i];
+            while(tmp != NULL){
+                printf("%s - ",tmp->name);
+                tmp = tmp->next;
+            }
+            printf("\n");
+        }
+    }
+    printf("ENd\n");
+}
+
+bool init_hash_table_insert(person *p)
+{
+    if(p==NULL)
+    return false;
+   int index = hash(p->name);
+   p->next = hash_table[index];
+    hash_table[index] = p;
+
+   return true;
+}
+person *hash_table_lookup(char *name)
+{
+   int index = hash(name);
+   person *tmp =hash_table[index];
+  
+  while(tmp!=NULL && strncmp (tmp->name,name,MAX_NAME) !=0 ){
+    tmp =tmp->next;
+  }
+
+  return tmp;
+
+}
+person *hash_table_delete(char *name)
+{
+    
+   int index = hash(name);
+   person *tmp =hash_table[index];
+   person *prev = NULL;
+  while(tmp!=NULL && strncmp (tmp->name,name,MAX_NAME)!=0){
+    prev =tmp;
+    tmp =tmp->next;
+  }
+  if(tmp==NULL)
+  return NULL;
+if(prev ==NULL){
+    //deleting the head
+    hash_table[index]= tmp->next;
+
+}
+else{
+     prev->next = tmp->next;
+}
+
+  return tmp;
+
+}
+int main ()
+{
+    init_hash_table();
+     prnt();
+
+     person jacob = {.name = "Jacob",.age=256};
+     person kate = {.name = "kate",.age=27};
+     person mpho = {.name = "mpho",.age=14};
+     person doul = {.name = "Dnckdoul",.age=86};
+     person fahim = {.name = "fahim",.age=256};
+     person akib = {.name = "akib",.age=27};
+     person alif = {.name = "alif",.age=14};
+     person nafic = {.name = "nafic",.age=86};
+     person sara = {.name = "sara",.age=14};
+     person alex = {.name = "alex",.age=86};
+     init_hash_table_insert(&jacob);
+     init_hash_table_insert(&kate);
+     init_hash_table_insert(&mpho);
+     init_hash_table_insert(&doul);
+     init_hash_table_insert(&fahim);
+     init_hash_table_insert(&akib);
+     init_hash_table_insert(&alif);
+     init_hash_table_insert(&nafic);
+     init_hash_table_insert(&sara);
+     init_hash_table_insert(&alex);
+     
+     prnt();
+     person *tmp = hash_table_lookup("mpho");
+      if(tmp == NULL){
+        printf("Not found\n");
+      }
+      else {
+        printf("Found %s.\n",tmp->name);
+      }
+
+      hash_table_delete("mpho");
+
+       tmp = hash_table_lookup("mpho");
+      if(tmp == NULL){
+        printf("Not found\n");
+      }
+      else {
+        printf("Found %s.\n",tmp->name);
+      }
+
+      prnt();
+
+    //  printf("Jacob => %u\n",hash("Jacob"));
+    //  printf("Bob => %u\n",hash("Bob"));
+    //  printf("Max => %u\n",hash("Max"));
+
+    //   printf("Min => %u\n",hash("Min"));
+
+}

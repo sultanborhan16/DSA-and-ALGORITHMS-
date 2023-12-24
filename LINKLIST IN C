@@ -1,0 +1,87 @@
+#include<stdio.h>
+#include<stdlib.h>
+struct node 
+{
+   int data;
+   struct node *next;
+};
+struct node *head=NULL;
+void display (){
+    struct node *p = head;
+    while(p!=NULL){
+        printf("%d ",p->data);
+        p=p->next;
+    }
+    printf("\n");
+}
+void insertatbegin(int n){
+
+     struct node *temp = (struct node*)malloc(sizeof(struct node));
+
+     temp->data=n;
+     temp->next = head;
+ 
+      head = temp;
+}
+void reverse(){
+    struct node *temp=NULL;
+    struct node *temp2=head;
+    while(head!=NULL){
+        temp2 = head->next;
+        head->next = temp;
+        temp = head;
+        head = temp2;
+    }
+     head = temp;
+}
+int  insertMiddel(int n){
+    struct node *midnode= (struct node*)malloc(sizeof(struct node));
+      midnode->data= n;
+      midnode->next=NULL;
+    struct node *p = head;
+    int cnt=0;
+    while(p!=NULL){
+        cnt++;
+        p=p->next;
+    }
+    int len = (cnt%2==0)? (cnt/2):(cnt/2)+1;
+
+    printf("len : %d //",len);
+
+    struct node *temp=head;
+    struct node *current=NULL;
+
+    for(int i=0;i<len;i++){
+        current = temp;
+        temp = temp->next;
+    }g .l;>:?:?>"L
+    L
+    LPL///
+    0"
+     current->next = midnode;
+      midnode->next = temp;
+
+
+}
+void insertatend(int n)
+{
+    struct node *temp = (struct node*)malloc(sizeof(struct node));
+    temp->data = n;
+    temp->next=NULL;
+    struct node *p = head;
+    while(p->next!=NULL){
+        p = p->next;
+    }
+
+    p->next = temp;
+
+}
+int main ()
+{
+   printf("Insert begin\n");
+   insertatbegin(4);
+   insertatbegin(7);
+   display();
+   //reverse();
+   //display();
+}
